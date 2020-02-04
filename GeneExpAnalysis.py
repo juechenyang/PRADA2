@@ -8,7 +8,13 @@ import os
 from subprocess import Popen
 from DirTools import check_dir
 import argparse
-base_dir = os.path.dirname(os.path.abspath(__file__))
+#specify the base dir
+base_dir = os.path.dirname(os.path.realpath(__file__))
+
+#bash scripts dir
+bash_dir = os.path.join(base_dir, "bash_scripts")
+
+
 parser = argparse.ArgumentParser()
 requiredNamed = parser.add_argument_group('required arguments')
 requiredNamed.add_argument('--case_result_dir')
@@ -24,11 +30,16 @@ reference_dir = args.reference_dir
 rsem_reference = os.path.join(reference_dir, 'rsem_ref', 'ref')
 check_dir(rsem_reference)
 bam = os.path.join(case_result_dir, 'bam_results', 'Aligned.toTranscriptome.out.bam')
-bash_file = os.path.join(base_dir, 'rsem.sh')
+
+#specify output dir
 outdir = os.path.join(case_result_dir, 'rsem_results', 'rsem')
-rsem_script = os.path.join(base_dir, 'rsem.sh')
-rsem_build_script = os.path.join(base_dir, 'rsem_build_ref.sh')
 check_dir(outdir)
+
+#create path for scripts
+rsem_script = os.path.join(bash_dir, 'rsem.sh')
+rsem_build_script = os.path.join(bash_dir, 'rsem_build_ref.sh')
+
+#run rsem
 Process = Popen(['bash ' + rsem_script + ' %s %s %s' % (bam, rsem_reference, outdir)], shell=True)
 Process.communicate()
 if Process.returncode != 0:
@@ -38,23 +49,3 @@ if Process.returncode != 0:
     print 'index build completed redo rsem'
     Process = Popen(['bash ' + rsem_script + ' %s %s %s' % (bam, rsem_reference, outdir)], shell=True)
     Process.communicate()
-
-
-
-
-
-#calculate Pearson
-# GDC_GeneExpDir = os.path.join('..', 'gdc_gene_exp', case)
-# for file in os.listdir(GDC_GeneExpDir):
-#     if 'FPKM.txt' in file:
-#         gdc_gene_exp = pd.read_csv(os.path.join(GDC_GeneExpDir, file), sep='\t',
-#                                    names=['gene_id', 'exp'])
-# rsem_gene_exp = pd.read_csv(os.path.join(outdir, '..', 'rsem.genes.results'),
-#                             sep='\t')
-# rsem_gene_exp[['gene_id', 'gene_name']] = rsem_gene_exp['gene_id'].str.split('_', expand=True)[[0,1]]
-# rsem_gene_exp = rsem_gene_exp[['gene_id', 'gene_name', 'FPKM']]
-# merged = pd.merge(gdc_gene_exp, rsem_gene_exp, how='outer', on=['gene_id'])
-# corr_matrix = merged[['exp', 'FPKM']].corr()
-# ten_cases_corr.append([case, corr_matrix.iloc[0,1]])
-# ten_cases_corr = pd.DataFrame(data=ten_cases_corr, columns=['case', 'pearson_corr'])
-# ten_cases_corr.to_csv('gene_exp_corr_FPKM-UQ.csv', index=None)

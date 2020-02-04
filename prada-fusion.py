@@ -69,13 +69,16 @@ seqDB = parsingFasta(fasta_file)
 
 
 
+'''
+########   used for debug  ########
 
-# case_repo = ['TCGA-CF-A47T-01A', 'TCGA-AO-A03U-01B-21R-A10J-07', 'TCGA-27-1835-01A-01R-1850-01'
-#             , 'TCGA-76-4925-01A-01R-1850-01', 'TCGA-FG-7643-01A-11R-2090-07', 'TCGA-P5-A72U-01A-31R-A32Q-07',
-#              'TCGA-92-8065-01A', 'TCGA-CH-5765-01A', 'TCGA-CH-5768-01A', 'TCGA-V1-A9OY-01A']
-# #get case info
-# # for i in range(0, len(case_repo)):
-# case_name = case_repo[i]
+case_repo = ['TCGA-CF-A47T-01A', 'TCGA-AO-A03U-01B-21R-A10J-07', 'TCGA-27-1835-01A-01R-1850-01'
+            , 'TCGA-76-4925-01A-01R-1850-01', 'TCGA-FG-7643-01A-11R-2090-07', 'TCGA-P5-A72U-01A-31R-A32Q-07',
+             'TCGA-92-8065-01A', 'TCGA-CH-5765-01A', 'TCGA-CH-5768-01A', 'TCGA-V1-A9OY-01A']
+#get case info
+# for i in range(0, len(case_repo)):
+case_name = case_repo[i]
+'''
 case = case_result_dir.split('/')[-1]
 print 'case is ' + case
 alignment_result_dir = os.path.join(case_result_dir,'bam_results')
@@ -120,14 +123,24 @@ orientedResult = orientedResult[orientedResult['overlapped'] == 'No']
 print 'data reshape start at %s' % time.ctime()
 fusionIdentifier = ['donor_gene_id', 'acceptor_gene_id', 'donor_gene', 'acceptor_gene', 'donor_chr', 'acceptor_chr', 'donorgene_strand', 'acceptorgene_strand', 'donorgene_type', 'acceptorgene_type']
 cc = getCandidates(orientedResult, fusionIdentifier, samfile, junctionSpanning_th, discordant_th)
+#output the full result without any optional filter
+
 readsResult = cc
-# ******** position consistency filter ********
+
+#define some columns name
 numOfDiscordant = '#discordant_read_pairs'
 discordantReads = 'discordant_reads'
 numOfJunctionSpanning = '#junctionSpanning_reads'
 junctionSpanningReads = 'junctionSpanning_reads'
 numberConsistent = '#Consistent'
 position_consistency = 'position_consistency'
+
+#remove fusions that has too less junction spanning reads or discordant reads
+readsResult = readsResult.loc[(readsResult[numOfJunctionSpanning]>=junctionSpanning_th) & (readsResult[numOfDiscordant]>=discordant_th),]
+check_dir(outdata_dir)
+readsResult.to_csv(os.path.join(outdata_dir, case + '.fullResult.csv'), index=None)
+
+# ******** position consistency filter ********
 readsResult[numberConsistent] = readsResult[numberConsistent].astype(float)
 readsResult[position_consistency] = (readsResult[numberConsistent]/readsResult[numOfDiscordant]).round(4)
 readsResult = readsResult[(readsResult[position_consistency] >= position_consistency_th)]
@@ -163,9 +176,10 @@ readsResult.insert(10, numOfDiscordant, numdisSeries)
 readsResult.insert(10, numOfJunctionSpanning, numjunspanSeries)
 readsResult[junctionSpanningReads] = junctionSpanningSeries
 readsResult[discordantReads] = discodantSeries
-check_dir(outdata_dir)
-readsResult.to_csv(os.path.join(outdata_dir, case + '.fullResult.csv'), index=None)
-print 'finished successfully at %s. Output file is %s' % (time.ctime(), case + '.fullResult.csv')
+
+#output filtered results
+readsResult.to_csv(os.path.join(outdata_dir, case + '.filtered_result.csv'), index=None)
+print 'finished successfully at %s. Output file is %s' % (time.ctime(), case + '.filtered_result.csv')
 
 
 frame_detection_py = os.path.join(base_dir, 'FrameInterface.py')

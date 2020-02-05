@@ -27,34 +27,41 @@ git clone https://github.com/juechenyang/PRADA2.git
 * Download conda bash installer [here](https://docs.conda.io/en/latest/miniconda.html)
 * Bash command to install:
 
-```
-bash your path to Miniconda3-latest-Linux-x86_64.sh
-```
+<pre>bash<i> your_path_to_Miniconda3-latest-Linux-x86_64.sh</i></pre>
+
 
 3. **Create prada enviroment**
 
+* locate the file "prada2.yml" inside "env" folder
+* create the conda environment using "prada2.yml" 
+
+<pre>conda env create -f <i>your_path_to_prada2.yml</i></pre>
 
 
-## Contributing
+4. **Activate enviroment**
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+```
+conda activate prada
+```
 
-## Versioning
+## Executing
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+* Alignment
+<pre>python prada2.py --read1 <i>your_path_to_read1_fastq</i> --read2 <i>your_path_to_read2_fastq</i> --outdir <i>your_path_to_output_dir</i></pre>
+
+* Fusion detection
+<pre>python prada2.py --read1 <i>your_path_to_read1_fastq</i> --read2 <i>your_path_to_read2_fastq</i> --outdir <i>your_path_to_output_dir --fusion</i></pre>
+
+* Get rsem gene expression
+<pre>python prada2.py --read1 <i>your_path_to_read1_fastq</i> --read2 <i>your_path_to_read2_fastq</i> --outdir <i>your_path_to_output_dir</i> --rsem</pre>
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Juechen Yang** - *Programmer Analyst @ UT Health, San Antonio* 
+* **Siyuan Zheng** - *Assistant Professor @ UT Health, San Antonio* - [our team](http://zhenglab.info/)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+**MIT**

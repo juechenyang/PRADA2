@@ -102,67 +102,66 @@ if os.path.isfile(out_bam) and os.path.isfile(out_bai):
                   + reference_file_dir)
 else:
     # check if genome index is ready
-    if not os.path.exists(genome_index_dir):
+    if not os.path.isfile(os.path.join(genome_index_dir, 'genomeParameters.txt')):
         print 'genome index has not been built, trying to rebuild'
-        check_dir(genome_index_dir)
-        Process = Popen(['bash ', bash_dir, '/check_index.sh %s %s %s %s' % (
-        genome_index_dir, reference_fasta, annotation_gtf, 8)],
-                        shell=True)
-        print Process.communicate()
-
-    # create directories to store output results
-    check_dir(os.path.join(case_dir, 'bam_results'))
-    check_dir(os.path.join(case_dir, 'inter_results'))
-    if qc:
-        check_dir(os.path.join(case_dir, 'QC'))
-
-    for read in read1_list+read2_list:
-        #convert all to a lower case format for verification
-        read_lower_form = read.lower()
-
-        #if any of the read is not a fastq format, the program will exit
-        if not (read_lower_form.endswith('.fastq') or read_lower_form.endswith('.fq')):
-            print 'your input is not a fastq file'
-            import sys
-            sys.exit()
-    if len(read1_list) != len(read2_list):
-        print 'your input read1 and read2 is not equal in pairs, please check'
-        import sys
-        sys.exit()
-
-
-    print 'from python: Start doing Alignment at %s' % time.ctime()
-    read1 = ','.join(read1_list)
-    read2 = ','.join(read2_list)
-    Process = Popen(['bash ' + bash_dir+ '/concise_mode_v1.0.sh %s %s %s %s %s %s %s %s %s %s' % (read1, read2,
-                   case_dir, qc, kp, thread, rsem, read1_list[0].split('/')[-1][:-6], markdup, genome_index_dir)], shell=True)
-    res = Process.communicate()
-
-    if Process.returncode != 0:
-        print 'error in genome index, trying to rebuild index'
         shutil.rmtree(genome_index_dir, ignore_errors=True)
         check_dir(genome_index_dir)
-        Process = Popen(['bash ' + bash_dir + '/check_index.sh %s %s %s %s' % (genome_index_dir, reference_fasta, annotation_gtf, 8)],
-                        shell=True)
-        print Process.communicate()
+        Process = Popen(['bash ' + bash_dir + '/check_index.sh %s %s %s %s' % (genome_index_dir, reference_fasta, annotation_gtf, thread)],shell=True)
+        Process.communicate()
+    else:
+        # create directories to store output results
+        check_dir(os.path.join(case_dir, 'bam_results'))
+        check_dir(os.path.join(case_dir, 'inter_results'))
+        if qc:
+            check_dir(os.path.join(case_dir, 'QC'))
 
-        print 'redo alignment'
-        Process = Popen(['bash ' + bash_dir + '/concise_mode_v1.0.sh %s %s %s %s %s %s %s %s %s %s' % (
-        read1, read2, case_dir, qc, kp, thread, rsem, read1_list[0].split('/')[-1][:-6], markdup, genome_index_dir)],
-                        shell=True)
-        print Process.communicate()
+        for read in read1_list+read2_list:
+            #convert all to a lower case format for verification
+            read_lower_form = read.lower()
+
+            #if any of the read is not a fastq format, the program will exit
+            if not (read_lower_form.endswith('.fastq') or read_lower_form.endswith('.fq')):
+                print 'your input is not a fastq file'
+                import sys
+                sys.exit()
+        if len(read1_list) != len(read2_list):
+            print 'your input read1 and read2 is not equal in pairs, please check'
+            import sys
+            sys.exit()
 
 
-    if fusion:
-        print 'from python: Start doing Fusion Detection at %s' % time.ctime()
-        fusion_py = os.path.join(base_dir, 'prada-fusion.py')
-        os.system('python ' + fusion_py + ' --case_result_dir ' + case_dir +
-                  ' --reference_fasta ' + reference_fasta + ' --annotation_gtf ' + annotation_gtf + ' --reference_dir '
-                  + reference_file_dir)
-    if rsem:
-        print 'from python: Start doing gene expression calculation at %s' % time.ctime()
-        rsem_py = os.path.join(base_dir, 'GeneExpAnalysis.py')
-        os.system('python ' + rsem_py + ' --case_result_dir ' + case_dir +
-                  ' --reference_fasta ' + reference_fasta + ' --annotation_gtf ' + annotation_gtf + ' --reference_dir '
-                  + reference_file_dir)
+        print 'from python: Start doing Alignment at %s' % time.ctime()
+        read1 = ','.join(read1_list)
+        read2 = ','.join(read2_list)
+        Process = Popen(['bash ' + bash_dir+ '/concise_mode_v1.0.sh %s %s %s %s %s %s %s %s %s %s' % (read1, read2,
+                       case_dir, qc, kp, thread, rsem, read1_list[0].split('/')[-1][:-6], markdup, genome_index_dir)], shell=True)
+        res = Process.communicate()
+
+        if Process.returncode != 0:
+            print 'error in genome index, trying to rebuild index'
+            shutil.rmtree(genome_index_dir, ignore_errors=True)
+            check_dir(genome_index_dir)
+            Process = Popen(['bash ' + bash_dir + '/check_index.sh %s %s %s %s' % (genome_index_dir, reference_fasta, annotation_gtf, thread)],
+                            shell=True)
+            print Process.communicate()
+
+            print 'redo alignment'
+            Process = Popen(['bash ' + bash_dir + '/concise_mode_v1.0.sh %s %s %s %s %s %s %s %s %s %s' % (
+            read1, read2, case_dir, qc, kp, thread, rsem, read1_list[0].split('/')[-1][:-6], markdup, genome_index_dir)],
+                            shell=True)
+            print Process.communicate()
+
+
+        if fusion:
+            print 'from python: Start doing Fusion Detection at %s' % time.ctime()
+            fusion_py = os.path.join(base_dir, 'prada-fusion.py')
+            os.system('python ' + fusion_py + ' --case_result_dir ' + case_dir +
+                      ' --reference_fasta ' + reference_fasta + ' --annotation_gtf ' + annotation_gtf + ' --reference_dir '
+                      + reference_file_dir)
+        if rsem:
+            print 'from python: Start doing gene expression calculation at %s' % time.ctime()
+            rsem_py = os.path.join(base_dir, 'GeneExpAnalysis.py')
+            os.system('python ' + rsem_py + ' --case_result_dir ' + case_dir +
+                      ' --reference_fasta ' + reference_fasta + ' --annotation_gtf ' + annotation_gtf + ' --reference_dir '
+                      + reference_file_dir)
 

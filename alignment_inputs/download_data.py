@@ -36,5 +36,8 @@ extract_process = Popen(['gunzip', gtf_file], stdout=subprocess.PIPE)
 print extract_process.communicate()
 
 #extract fasta file
-extract_process = Popen(['tar', '-zxvf', fasta_file], stdout=subprocess.PIPE)
+extract_process = Popen(['tar', '-zxvf', fasta_file, '--directory', root_dir], stdout=subprocess.PIPE)
 print extract_process.communicate()
+
+#remove the fasta tar
+os.remove(fasta_file)

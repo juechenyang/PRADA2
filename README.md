@@ -60,8 +60,6 @@ conda activate prada
 * **Juechen Yang** - *Programmer Analyst @ UT Health, San Antonio* 
 * **Siyuan Zheng** - *Assistant Professor @ UT Health, San Antonio* - [our team](http://zhenglab.info/)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
 ## License
 
 **MIT**

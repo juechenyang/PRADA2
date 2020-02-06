@@ -96,3 +96,5 @@ for name, group in Group:
              'principal']], columns=out_columns))
 fusion_gene_transcript = pd.merge(fusion_predict, prioritized_transcripts, how='inner', on=['donor_gene_id', 'acceptor_gene_id'])
 fusion_gene_transcript.to_csv(os.path.join(fusion_dir, case+'.fusion_gene_transcript.csv'), index=None)
+
+print 'Success! fusion analysis done'

@@ -1,7 +1,9 @@
 name: prada
 channels:
-  - bioconda
   - anaconda
+  - r
+  - bioconda
+  - conda-forge
   - defaults
 dependencies:
   - backports=1.0=py27_1
@@ -12,6 +14,9 @@ dependencies:
   - bedtools=2.27.1=he860b03_3
   - biopython=1.72=py27h04863e7_0
   - blas=1.0=mkl
+  - blast=2.9.0=h20b68b9_1
+  - boost=1.68.0=py27h8619c78_1001
+  - boost-cpp=1.68.0=h11c811c_1000
   - bzip2=1.0.6=h14c3975_5
   - ca-certificates=2019.1.23=0
   - certifi=2019.3.9=py27_0
@@ -24,6 +29,8 @@ dependencies:
   - functools32=3.2.3.2=py27_1
   - futures=3.2.0=py27_0
   - glib=2.56.2=hd408876_0
+  - gmp=6.2.0=he1b5a44_1
+  - gnutls=3.6.5=hd3a4fd2_1002
   - gst-plugins-base=1.14.0=hbbd80ab_1
   - gstreamer=1.14.0=hb453b48_1
   - gtfparse=1.2.0=py_0
@@ -51,12 +58,32 @@ dependencies:
   - mkl_fft=1.0.10=py27ha843d7b_0
   - mkl_random=1.0.2=py27hd81dba3_0
   - ncurses=6.1=he6710b0_1
+  - nettle=3.4.1=h1bed415_1002
   - numpy=1.15.4=py27h7e9f1db_0
   - numpy-base=1.15.4=py27hde5b4d6_0
   - openjdk=8.0.152=h46b5887_1
   - openssl=1.1.1=h7b6447c_0
   - pandas=0.24.1=py27he6710b0_0
   - pcre=8.42=h439df22_0
+  - perl=5.26.2=h516909a_1006
+  - perl-archive-tar=2.32=pl526_0
+  - perl-carp=1.38=pl526_3
+  - perl-common-sense=3.74=pl526_2
+  - perl-compress-raw-bzip2=2.087=pl526he1b5a44_0
+  - perl-compress-raw-zlib=2.087=pl526hc9558a2_0
+  - perl-exporter=5.72=pl526_1
+  - perl-exporter-tiny=1.002001=pl526_0
+  - perl-extutils-makemaker=7.36=pl526_1
+  - perl-io-compress=2.087=pl526he1b5a44_0
+  - perl-io-zlib=1.10=pl526_2
+  - perl-json=4.02=pl526_0
+  - perl-json-xs=2.34=pl526h6bb024c_3
+  - perl-list-moreutils=0.428=pl526_1
+  - perl-list-moreutils-xs=0.428=pl526_0
+  - perl-pathtools=3.75=pl526h14c3975_1
+  - perl-scalar-list-utils=1.52=pl526h516909a_0
+  - perl-types-serialiser=1.0=pl526_2
+  - perl-xsloader=0.24=pl526_0
   - picard=2.18.27=0
   - pip=19.0.1=py27_0
   - pybedtools=0.8.0=py27he860b03_1

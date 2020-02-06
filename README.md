@@ -44,6 +44,19 @@ git clone https://github.com/juechenyang/PRADA2.git
 conda activate prada
 ```
 
+## Data prepare
+
+* locate the "download_data.py" script inside the /alignment_inputs
+* make sure you have activated prada enviroment in step 4 of installing
+* run the following command:
+
+<pre>python <i>your_path_to_download_data.py</i></pre>
+
+there should two files after finished downloading data:
+* GRCh38.d1.vd1.fa (reference genome)
+* gencode.v22.annotation.gtf (annotation gtf)
+
+
 ## Executing
 
 * Alignment

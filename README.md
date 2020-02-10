@@ -52,7 +52,7 @@ conda activate prada
 
 <pre>python <i>your_path_to_download_data.py</i></pre>
 
-there should two files after finished downloading data:
+After the downloading process finished, there should be two files in /alignment_input:
 * GRCh38.d1.vd1.fa (reference genome)
 * gencode.v22.annotation.gtf (annotation gtf)
 

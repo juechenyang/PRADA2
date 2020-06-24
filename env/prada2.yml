@@ -62,7 +62,6 @@ dependencies:
   - numpy=1.15.4=py27h7e9f1db_0
   - numpy-base=1.15.4=py27hde5b4d6_0
   - openjdk=8.0.152=h46b5887_1
-  - openssl=1.1.1=h7b6447c_0
   - pandas=0.24.1=py27he6710b0_0
   - pcre=8.42=h439df22_0
   - perl=5.26.2=h516909a_1006
